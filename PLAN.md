@@ -75,9 +75,9 @@ Work on **one milestone at a time**. Each ends with a working, testable result a
 - **Done when:** all endpoints work from `http://localhost:8000/docs`.
 
 ### M6: Dockerize the API
-- [ ] `Dockerfile` for the API
-- [ ] Add `api` service to Compose; it reaches Qdrant by service name (`qdrant`), not `localhost`
-- [ ] Pass secrets through `.env`, never bake them into the image
+- [x] `Dockerfile` for the API
+- [x] Add `api` service to Compose; it reaches Qdrant by service name (`qdrant`), not `localhost`
+- [x] Pass secrets through `.env`, never bake them into the image
 - **Done when:** `docker compose up --build` on a fresh clone gives a working API.
 
 ### M7: Polish
