@@ -68,10 +68,10 @@ Work on **one milestone at a time**. Each ends with a working, testable result a
 - **Done when:** a question about the sample doc returns a grounded answer plus sources.
 
 ### M5: REST API
-- [ ] `GET /health` returns service status
-- [ ] `POST /documents` uploads a file and ingests it
-- [ ] `POST /query` takes `{"question": "..."}` and returns `{"answer": "...", "sources": [{"file": "...", "score": 0.0}]}`
-- [ ] Basic error handling (empty question, unsupported file type, Qdrant unreachable)
+- [x] `GET /health` returns service status
+- [x] `POST /documents` uploads a file and ingests it
+- [x] `POST /query` takes `{"question": "..."}` and returns `{"answer": "...", "sources": [{"file": "...", "score": 0.0}]}`
+- [x] Basic error handling (empty question, unsupported file type, Qdrant unreachable)
 - **Done when:** all endpoints work from `http://localhost:8000/docs`.
 
 ### M6: Dockerize the API
