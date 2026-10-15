@@ -57,9 +57,9 @@ Work on **one milestone at a time**. Each ends with a working, testable result a
 - **Done when:** `docker compose up -d` starts it and the dashboard loads at `http://localhost:6333/dashboard`.
 
 ### M3: Ingestion pipeline
-- [ ] `config.py` reads settings from env (API keys, Qdrant host, collection name, chunk size)
-- [ ] `ingest.py` loads files from `data/`, splits with `SentenceSplitter` (start with chunk_size=512, overlap=50), embeds, stores in Qdrant
-- [ ] Add a sample document in `data/`
+- [x] `config.py` reads settings from env (API keys, Qdrant host, collection name, chunk size)
+- [x] `ingest.py` loads files from `data/`, splits with `SentenceSplitter` (start with chunk_size=512, overlap=50), embeds, stores in Qdrant
+- [x] Add a sample document in `data/`
 - **Done when:** running the script creates a collection with points visible in the dashboard.
 
 ### M4: Query engine
