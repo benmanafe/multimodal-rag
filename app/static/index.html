@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RAG Document Q&amp;A</title>
+<style>
+  :root { --bg:#f6f7f9; --card:#fff; --text:#1d2330; --muted:#667085; --accent:#3b5bdb; --border:#e3e6ec; --err:#c92a2a; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#14171f; --card:#1d222d; --text:#e7e9ee; --muted:#9aa3b5; --accent:#748ffc; --border:#2c3342; --err:#ff8787; }
+  }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--text); font:16px/1.5 system-ui, sans-serif; }
+  main { max-width:720px; margin:0 auto; padding:32px 16px 64px; }
+  h1 { margin:0 0 4px; font-size:1.5rem; }
+  .sub { color:var(--muted); margin:0 0 24px; }
+  section { background:var(--card); border:1px solid var(--border); border-radius:10px; padding:16px; margin-bottom:16px; }
+  h2 { margin:0 0 10px; font-size:1rem; }
+  input[type=text] { width:100%; padding:10px; border:1px solid var(--border); border-radius:8px; background:var(--bg); color:var(--text); font:inherit; }
+  input[type=file] { color:var(--muted); max-width:100%; }
+  button { margin-top:10px; padding:9px 16px; border:0; border-radius:8px; background:var(--accent); color:#fff; font:inherit; cursor:pointer; }
+  button:disabled { opacity:.5; cursor:wait; }
+  .row { display:flex; gap:8px; } .row input { flex:1; } .row button { margin-top:0; }
+  #answer { white-space:pre-wrap; }
+  .src { display:flex; justify-content:space-between; padding:6px 0; border-top:1px solid var(--border); color:var(--muted); font-size:.9rem; }
+  .err { color:var(--err); } .muted { color:var(--muted); }
+  [hidden] { display:none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>RAG Document Q&amp;A</h1>
+  <p class="sub">Upload a document, then ask questions about it. <a href="/docs">API docs</a></p>
+
+  <section>
+    <h2>1. Add a document (.txt, .md, .pdf)</h2>
+    <input type="file" id="file" accept=".txt,.md,.pdf">
+    <div><button id="upload">Upload &amp; index</button></div>
+    <p id="upload-msg" class="muted" role="status"></p>
+  </section>
+
+  <section>
+    <h2>2. Ask a question</h2>
+    <form class="row" id="ask-form">
+      <input type="text" id="question" placeholder="e.g. What is chunk size?" aria-label="Question">
+      <button id="ask" type="submit">Ask</button>
+    </form>
+  </section>
+
+  <section id="result" hidden>
+    <h2>Answer</h2>
+    <div id="answer"></div>
+    <h2 style="margin-top:16px">Sources</h2>
+    <div id="sources"></div>
+  </section>
+  <p id="error" class="err" role="alert"></p>
+</main>
+<script>
+const $ = id => document.getElementById(id);
+
+// FastAPI returns {detail: "text"} or, for validation errors, {detail: [{msg}]}.
+async function readError(res) {
+  try {
+    const d = (await res.json()).detail;
+    return Array.isArray(d) ? d.map(e => e.msg).join("; ") : d;
+  } catch { return res.statusText; }
+}
+
+$("upload").onclick = async () => {
+  const f = $("file").files[0];
+  if (!f) { $("upload-msg").textContent = "Choose a file first."; return; }
+  $("upload").disabled = true;
+  $("upload-msg").textContent = "Indexing… (re-embeds all documents, may take a moment)";
+  const body = new FormData(); body.append("file", f);
+  try {
+    const res = await fetch("/documents", { method: "POST", body });
+    $("upload-msg").textContent = res.ok
+      ? `Indexed ${f.name}. Collection now has ${(await res.json()).chunks_in_collection} chunks.`
+      : "Error: " + await readError(res);
+  } catch { $("upload-msg").textContent = "Error: could not reach the API."; }
+  $("upload").disabled = false;
+};
+
+$("ask-form").onsubmit = async e => {
+  e.preventDefault();
+  $("error").textContent = ""; $("result").hidden = true;
+  $("ask").disabled = true; $("ask").textContent = "Thinking…";
+  try {
+    const res = await fetch("/query", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ question: $("question").value }),
+    });
+    if (!res.ok) { $("error").textContent = "Error: " + await readError(res); }
+    else {
+      const data = await res.json();
+      $("answer").textContent = data.answer;
+      $("sources").replaceChildren(...data.sources.map(s => {
+        const row = document.createElement("div"); row.className = "src";
+        const name = document.createElement("span"); name.textContent = s.file;
+        const score = document.createElement("span"); score.textContent = "similarity " + s.score.toFixed(3);
+        row.append(name, score); return row;
+      }));
+      $("result").hidden = false;
+    }
+  } catch { $("error").textContent = "Error: could not reach the API."; }
+  $("ask").disabled = false; $("ask").textContent = "Ask";
+};
+</script>
+</body>
+</html>

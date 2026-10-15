@@ -7,6 +7,7 @@ from pathlib import Path
 
 import httpx
 from fastapi import FastAPI, HTTPException, UploadFile
+from fastapi.responses import FileResponse
 from pydantic import BaseModel, field_validator
 from qdrant_client.http.exceptions import ResponseHandlingException
 
@@ -78,3 +79,9 @@ def query(req: QueryRequest):
     except ValueError:
         # Raised by Qdrant client when the collection doesn't exist yet.
         raise HTTPException(404, "No documents ingested yet. POST a file to /documents.")
+
+
+@app.get("/", include_in_schema=False)
+def demo_page():
+    """Single-page demo UI (upload + ask), calling the endpoints above."""
+    return FileResponse(Path(__file__).parent / "static" / "index.html")

@@ -81,8 +81,9 @@ Work on **one milestone at a time**. Each ends with a working, testable result a
 - **Done when:** `docker compose up --build` on a fresh clone gives a working API.
 
 ### M7: Polish
-- [ ] A few tests (e.g. chunking, `/health`, `/query` with a mocked LLM)
-- [ ] README: what it is, how to run, example `curl` commands
+- [x] A few tests (e.g. chunking, `/health`, `/query` with a mocked LLM)
+- [x] README: what it is, how to run, example `curl` commands
+- [x] Demo web page at `/` (added by request; upload + ask + sources)
 - [ ] Tag `v0.1.0`
 - **Done when:** someone else could clone the repo and run it from the README alone.
 
@@ -103,4 +104,4 @@ Work on **one milestone at a time**. Each ends with a working, testable result a
 
 ## Open decisions
 - [x] LLM and embedding provider: DeepSeek (`deepseek-chat`) for answers, local Ollama `nomic-embed-text` for embeddings (not `all-minilm`: its ~256-token limit would truncate 512-token chunks)
-- [ ] Whether to add a simple UI (Streamlit) after M7 or go straight to stretch goals
+- [x] Simple UI: single HTML page served by FastAPI at `/` (no Streamlit: no extra dependency or service)
