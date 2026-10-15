@@ -4,6 +4,7 @@ Run from the project root:  uvicorn app.main:app --reload
 Interactive docs:           http://localhost:8000/docs
 """
 from pathlib import Path
+from typing import Literal
 
 import httpx
 from fastapi import FastAPI, HTTPException, UploadFile
@@ -21,8 +22,17 @@ app = FastAPI(title="RAG Document Q&A")
 UNREACHABLE = (ResponseHandlingException, httpx.ConnectError, ConnectionError)
 
 
+class ChatTurn(BaseModel):
+    role: Literal["user", "assistant"]
+    content: str
+
+
+MAX_HISTORY = 8  # keep only the latest turns to limit tokens/cost
+
+
 class QueryRequest(BaseModel):
     question: str
+    history: list[ChatTurn] = []  # earlier turns of this chat session; empty = new chat
 
     @field_validator("question")
     @classmethod
@@ -73,7 +83,8 @@ def upload_document(file: UploadFile):
 @app.post("/query", response_model=QueryResponse)
 def query(req: QueryRequest):
     try:
-        return answer_question(req.question)
+        history = [t.model_dump() for t in req.history[-MAX_HISTORY:]]
+        return answer_question(req.question, history)
     except UNREACHABLE:
         raise HTTPException(503, "Qdrant or Ollama is unreachable")
     except ValueError:

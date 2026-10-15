@@ -1,10 +1,14 @@
 """Query: embed the question -> retrieve top-k chunks from Qdrant -> LLM answers.
 
+Supports chat: pass earlier turns as `history` and follow-up questions like
+"tell me more about that" are rewritten into standalone questions before retrieval.
+
 Try it from the project root:  python -m app.query "What is RAG?"
 """
 import sys
 
 from llama_index.core import VectorStoreIndex
+from llama_index.core.llms import ChatMessage, MessageRole
 from llama_index.llms.deepseek import DeepSeek
 from llama_index.vector_stores.qdrant import QdrantVectorStore
 
@@ -12,8 +16,11 @@ from app.config import settings
 from app.ingest import get_embed_model, get_qdrant_client
 
 
-def answer_question(question: str) -> dict:
-    """Return {"answer": str, "sources": [{"file": str, "score": float}]}."""
+def answer_question(question: str, history: list[dict] | None = None) -> dict:
+    """Return {"answer": str, "sources": [{"file": str, "score": float}]}.
+
+    history: earlier turns as [{"role": "user" | "assistant", "content": str}, ...].
+    """
     # Connect to the collection that ingest.py already filled (nothing is re-embedded).
     vector_store = QdrantVectorStore(
         client=get_qdrant_client(), collection_name=settings.qdrant_collection
@@ -22,9 +29,23 @@ def answer_question(question: str) -> dict:
         vector_store, embed_model=get_embed_model()
     )
     llm = DeepSeek(model=settings.llm_model, api_key=settings.deepseek_api_key)
-    engine = index.as_query_engine(llm=llm, similarity_top_k=settings.top_k)
 
-    response = engine.query(question)
+    # condense_plus_context: with history it first rewrites the question into a
+    # standalone one (1 extra LLM call), then retrieves and answers. With no history
+    # it skips the rewrite, so a first question costs a single LLM call.
+    engine = index.as_chat_engine(
+        chat_mode="condense_plus_context",
+        llm=llm,
+        similarity_top_k=settings.top_k,
+    )
+    chat_history = [
+        ChatMessage(
+            role=MessageRole.USER if m["role"] == "user" else MessageRole.ASSISTANT,
+            content=m["content"],
+        )
+        for m in (history or [])
+    ]
+    response = engine.chat(question, chat_history=chat_history)
     return {
         "answer": str(response),
         "sources": [
