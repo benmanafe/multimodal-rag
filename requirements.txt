@@ -1,0 +1,23 @@
+# API
+fastapi
+uvicorn[standard]
+python-multipart   # file uploads for POST /documents
+
+# RAG
+llama-index
+llama-index-vector-stores-qdrant
+qdrant-client
+pypdf              # .pdf loading
+
+# Config
+pydantic-settings
+
+# Testing
+pytest
+httpx              # FastAPI TestClient
+
+# LLM/embedding provider packages are added once the provider is chosen (before M3), e.g.:
+# llama-index-llms-openai, llama-index-embeddings-openai
+# llama-index-llms-anthropic
+# llama-index-llms-ollama, llama-index-embeddings-ollama
+# Versions are left unpinned for now; pin them after the first successful install.
