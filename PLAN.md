@@ -63,8 +63,8 @@ Work on **one milestone at a time**. Each ends with a working, testable result a
 - **Done when:** running the script creates a collection with points visible in the dashboard.
 
 ### M4: Query engine
-- [ ] `query.py` connects to the existing collection, retrieves top-k chunks (start k=3), generates an answer
-- [ ] Return source file names and similarity scores with each answer
+- [x] `query.py` connects to the existing collection, retrieves top-k chunks (start k=3), generates an answer
+- [x] Return source file names and similarity scores with each answer
 - **Done when:** a question about the sample doc returns a grounded answer plus sources.
 
 ### M5: REST API
