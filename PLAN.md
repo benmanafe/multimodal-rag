@@ -17,7 +17,7 @@ It uses Qdrant in Docker Compose, LlamaIndex for ingest/query scripts, and an op
 | API | FastAPI + Uvicorn |
 | Containers | Docker + Docker Compose (`qdrant` and `api` services) |
 | Version control | Git, small commits per milestone |
-| LLM + embeddings | **TBD: decide before Milestone 3** (OpenAI, Anthropic, or local via Ollama). Keep it swappable through `config.py` and `.env`. |
+| LLM + embeddings | DeepSeek for answers, local Ollama (`nomic-embed-text`) for embeddings. Swappable through `config.py` and `.env`. |
 
 ## Scope
 **In scope (core):** text documents (`.txt`, `.md`, `.pdf`): ingest, chunk, embed, store, retrieve, answer with sources.
@@ -53,7 +53,7 @@ Work on **one milestone at a time**. Each ends with a working, testable result a
 - **Done when:** repo has a clean first commit and no secrets are tracked.
 
 ### M2: Qdrant in Docker
-- [ ] `docker-compose.yml` with `qdrant` service, pinned image version, ports 6333/6334, named volume
+- [x] `docker-compose.yml` with `qdrant` service, pinned image version, ports 6333/6334, named volume
 - **Done when:** `docker compose up -d` starts it and the dashboard loads at `http://localhost:6333/dashboard`.
 
 ### M3: Ingestion pipeline
@@ -102,5 +102,5 @@ Work on **one milestone at a time**. Each ends with a working, testable result a
 - Check off completed items in this file as we go.
 
 ## Open decisions
-- [ ] LLM and embedding provider (affects cost and config)
+- [x] LLM and embedding provider: DeepSeek (`deepseek-chat`) for answers, local Ollama `nomic-embed-text` for embeddings (not `all-minilm`: its ~256-token limit would truncate 512-token chunks)
 - [ ] Whether to add a simple UI (Streamlit) after M7 or go straight to stretch goals
