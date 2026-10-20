@@ -1,0 +1,12 @@
+{
+  "checks": {
+    "source_image_before_restart": true,
+    "qdrant_point_before_restart": true,
+    "api_health_after_restart": true,
+    "source_image_after_restart": true,
+    "bind_mount_visible_on_host": true,
+    "qdrant_point_after_restart": true
+  },
+  "deepseek_requests": 0,
+  "passed": true
+}

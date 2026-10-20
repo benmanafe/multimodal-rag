@@ -1,0 +1,31 @@
+# Preserve the original project's containers and Qdrant volume after moving to the repository root.
+name: text-rag
+
+services:
+  qdrant:
+    image: qdrant/qdrant:v1.19.2   # pinned so upgrades are deliberate
+    ports:
+      - "6333:6333"   # REST API + dashboard
+      - "6334:6334"   # gRPC
+    volumes:
+      - qdrant_data:/qdrant/storage   # named volume: data survives container restarts
+    restart: unless-stopped
+
+  api:
+    build: .
+    ports:
+      - "8000:8000"
+    env_file: .env   # secrets are injected at runtime, never baked into the image
+    environment:
+      # Inside Compose, services reach each other by service name, not localhost.
+      QDRANT_HOST: qdrant
+      # Ollama runs on the host machine, not in Compose.
+      OLLAMA_BASE_URL: http://host.docker.internal:11434
+    volumes:
+      - ./data:/app/data   # uploaded/ingested documents persist on the host
+    depends_on:
+      - qdrant
+    restart: unless-stopped
+
+volumes:
+  qdrant_data:

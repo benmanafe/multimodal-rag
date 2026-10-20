@@ -1,0 +1,21 @@
+# Secrets
+.env
+
+# Python
+venv/
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Documents: keep only the sample file and the placeholder
+data/*
+!data/.gitkeep
+!data/sample.md
+
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store
+
+/archive/

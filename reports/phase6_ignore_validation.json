@@ -1,0 +1,13 @@
+{
+  "ignored": [
+    ".env",
+    "data/documents/private_cv.pdf",
+    "data/images/generated/diagram.png"
+  ],
+  "retained": [
+    "data/sample.md",
+    "data/.gitkeep"
+  ],
+  "passed": true,
+  "deepseek_requests": 0
+}

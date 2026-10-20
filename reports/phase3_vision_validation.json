@@ -1,0 +1,47 @@
+{
+  "provider": "deepseek",
+  "requested_model": "deepseek-flash",
+  "request_limit": 2,
+  "requests_attempted": 2,
+  "responses": [
+    {
+      "status": 200,
+      "model": "deepseek-flash",
+      "usage": {
+        "prompt_tokens": 347,
+        "completion_tokens": 99,
+        "total_tokens": 446
+      }
+    },
+    {
+      "status": 200,
+      "model": "deepseek-flash",
+      "usage": {
+        "prompt_tokens": 340,
+        "completion_tokens": 105,
+        "total_tokens": 445
+      }
+    }
+  ],
+  "text_pages_preserved": 2,
+  "captions": [
+    {
+      "page": 1,
+      "image_kind": "raster",
+      "text": "The image shows a simple left-to-right flow diagram with three rectangular boxes connected by right-pointing arrows. The left box is labeled \"PDF\"; an arrow points from it to the middle box, labeled \"Text + Captions\"; a second arrow points from the middle box to the right box, labeled \"Qdrant.\" All labels are clearly readable. The diagram appears to illustrate a pipeline in which content from a PDF is converted into text and captions and then sent to Qdrant."
+    },
+    {
+      "page": 2,
+      "image_kind": "vector_crop",
+      "text": "The image shows a simple left-to-right workflow diagram with three rectangular boxes outlined in dark blue. The first box is labeled \"Question,\" the second is labeled \"Retrieval,\" and the third is labeled \"Answer.\" A right-pointing arrow connects the \"Question\" box to the \"Retrieval\" box, and another right-pointing arrow connects the \"Retrieval\" box to the \"Answer\" box. The diagram appears to illustrate a retrieval-based question-answering process. All visible text is readable."
+    }
+  ],
+  "warnings": [],
+  "checks": {
+    "two_text_pages": true,
+    "raster_labels": true,
+    "vector_labels": true,
+    "no_warnings": true
+  },
+  "passed": true
+}

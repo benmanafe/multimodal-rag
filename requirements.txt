@@ -1,0 +1,28 @@
+-c requirements.lock
+
+# API
+fastapi==0.150.0
+uvicorn[standard]==0.54.0
+python-multipart==0.0.32   # file uploads for POST /documents
+
+# RAG
+llama-index==0.14.25
+llama-index-core==0.14.25
+llama-index-vector-stores-qdrant==0.10.4
+qdrant-client==1.19.1
+pypdf==6.21.1
+pymupdf==1.28.2   # page text, embedded images, and vector-diagram crops
+llama-index-readers-file==0.7.0
+
+# Config
+pydantic==2.14.1
+pydantic-settings==2.16.0
+
+# Testing
+pytest==9.1.1
+httpx==0.28.1              # model HTTP client and FastAPI TestClient
+
+# LLM + embeddings
+llama-index-llms-deepseek==0.4.1
+llama-index-embeddings-ollama==0.10.0
+# Direct and transitive versions come from the successfully tested Linux image.

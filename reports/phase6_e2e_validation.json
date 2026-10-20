@@ -1,0 +1,91 @@
+{
+  "request_limit": 3,
+  "deepseek_requests": 3,
+  "responses": [
+    {
+      "kind": "caption",
+      "http_status": 200,
+      "model": "deepseek-flash",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 321,
+        "completion_tokens": 109,
+        "total_tokens": 430
+      }
+    },
+    {
+      "kind": "answer",
+      "http_status": 200,
+      "model": "deepseek-flash",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 452,
+        "completion_tokens": 331,
+        "total_tokens": 783
+      }
+    },
+    {
+      "kind": "caption",
+      "http_status": 200,
+      "model": "deepseek-flash",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 321,
+        "completion_tokens": 113,
+        "total_tokens": 434
+      }
+    }
+  ],
+  "checks": {
+    "health": true,
+    "both_modalities_in_one_collection": true,
+    "matching_vector_dimensions": true,
+    "text_and_diagram_answer_labels": true,
+    "mixed_source_citations": true,
+    "original_image_served": true,
+    "stable_rebuild_no_duplicates": true,
+    "image_pointer_survives_rebuild": true,
+    "api_budget": true
+  },
+  "embedding_dimension": 768,
+  "upload_status": 200,
+  "counts": {
+    "file": "synthetic_cv.pdf",
+    "chunks_in_collection": 3,
+    "text_chunks": 2,
+    "image_descriptions": 1,
+    "total_vectors": 3,
+    "warnings": [],
+    "warning_count": 0
+  },
+  "query_status": 200,
+  "question": "Answer these three numbered questions using only this CV: 1. Which libraries are listed? 2. What labels and flow appear in the architecture diagram? 3. Explain how the listed libraries and diagram relate to the project. Distinguish image-description observations from extracted text and cite pages.",
+  "answer": {
+    "answer": "1. **Which libraries are listed?**  \n   The extracted text on page 1 lists **FastAPI and Qdrant** as libraries. (Source: `synthetic_cv.pdf`, page 1, text.)\n\n2. **What labels and flow appear in the architecture diagram?**  \n   According to the model-generated image description on page 2, the diagram is a simple horizontal block diagram with three outlined rectangular boxes connected by straight horizontal lines. From left to right, the boxes are labeled **\u201cPDF,\u201d \u201cText + Captions,\u201d and \u201cQdrant.\u201d** The description says the connecting lines have **no visible arrowheads**, so the direction of flow is **not explicitly indicated**. (Source: `synthetic_cv.pdf`, page 2, image description \u2014 not verified image pixels.)\n\n3. **Explain how the listed libraries and diagram relate to the project.**  \n   The extracted text on page 1 identifies the project as **document question answering** and lists **FastAPI and Qdrant** as libraries. The page 2 image description shows a diagram labeled **PDF \u2192 Text + Captions \u2192 Qdrant**, but it does not explicitly state flow direction or explain how FastAPI is used. Therefore, the document supports that the project involves document question answering with FastAPI and Qdrant, and that the diagram depicts PDF content being associated with text/captions and Qdrant \u2014 but it does **not** provide a detailed explanation connecting FastAPI to the diagram or confirming the pipeline direction. (Sources: `synthetic_cv.pdf`, page 1 text; page 2 image description.)",
+    "sources": [
+      {
+        "file": "synthetic_cv.pdf",
+        "score": 0.6886,
+        "page": 2,
+        "modality": "text",
+        "image_url": null
+      },
+      {
+        "file": "synthetic_cv.pdf",
+        "score": 0.6762,
+        "page": 2,
+        "modality": "image",
+        "image_url": "/images/d3fe3eebd634b2b8f77bec10d646027d9f58c63fb41edcad646514415b786456/page_2_img_0001.png"
+      },
+      {
+        "file": "synthetic_cv.pdf",
+        "score": 0.6273,
+        "page": 1,
+        "modality": "text",
+        "image_url": null
+      }
+    ]
+  },
+  "passed": true,
+  "total_tokens": 1647
+}

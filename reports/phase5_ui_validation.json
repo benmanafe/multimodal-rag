@@ -1,0 +1,28 @@
+{
+  "browser": "chrome.exe headless",
+  "deepseek_requests": 0,
+  "checks": {
+    "document_inventory_visible": true,
+    "unindexed_documents_disabled": true,
+    "original_image_loaded": true,
+    "filename_page_modality_citations": true,
+    "mobile_sidebar_collapsed": true,
+    "mobile_no_horizontal_overflow": true,
+    "mobile_document_panel_accessible": true,
+    "missing_image_fallback": true,
+    "legacy_text_source_rendered": true,
+    "upload_counts_and_warnings": true,
+    "external_image_url_rejected": true,
+    "filenames_rendered_as_text": true,
+    "history_sent_to_api": true,
+    "chat_and_warnings_survive_reload": true,
+    "saved_history_excludes_notes": true,
+    "scope_change_starts_clean_chat": true,
+    "selected_scope_sent_to_api": true,
+    "selected_scope_citation": true,
+    "selection_survives_reload": true,
+    "empty_selection_cannot_apply": true,
+    "scope_restored_per_chat": true
+  },
+  "passed": true
+}
